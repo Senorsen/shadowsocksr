@@ -108,8 +108,10 @@ class tls_ticket_auth(plain.plain):
             host = self.server_info.obfs_param or self.server_info.host
             if host and host[-1] in string.digits:
                 host = ''
-            hosts = host.split(',')
-            host = random.choice(hosts)
+            if type(host) == list:
+                host = random.choice(host)
+            else:
+                host = random.choice(host.split(','))
             ext += self.sni(host)
             ext += b"\x00\x17\x00\x00"
             if host not in self.server_info.data.ticket_buf:
